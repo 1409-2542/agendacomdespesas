@@ -79,11 +79,11 @@
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
       padding: 5px;
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
     }
     
     .tabs::-webkit-scrollbar {
-      display: none; /* Chrome/Safari */
+      display: none;
     }
     
     .tab {
@@ -263,71 +263,26 @@
       gap: 10px;
     }
     
-    .calendar-view-options {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .calendar-view-option {
-      padding: 8px 16px;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-weight: 500;
-      background: var(--gray-light);
-      transition: var(--transition);
-    }
-    
-    .calendar-view-option:hover {
-      background: #dee2e6;
-    }
-    
-    .calendar-view-option.active {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .calendar-grid {
+    .week-day {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-    }
-    
-    .calendar-week-grid {
-      display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 120px 1fr;
       gap: 15px;
+      margin-bottom: 15px;
     }
     
-    .calendar-day-header {
+    .week-day-header {
       font-weight: bold;
-      text-align: center;
       padding: 12px;
       background: var(--gray-light);
       border-radius: var(--border-radius);
-      font-size: 0.9rem;
+      text-align: center;
     }
     
-    .calendar-day {
-      border: 1px solid var(--gray-light);
-      padding: 12px;
-      min-height: 140px;
+    .week-day-events {
       background: white;
+      padding: 15px;
       border-radius: var(--border-radius);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .calendar-day.today {
-      background: var(--primary-light);
-      border: 1px solid var(--primary);
-    }
-    
-    .calendar-day.other-month {
-      background: #f9f9f9;
-      color: var(--gray);
-      opacity: 0.7;
+      border: 1px solid var(--gray-light);
     }
     
     .calendar-event {
@@ -592,29 +547,6 @@
       cursor: pointer;
     }
     
-    /* Week day */
-    .week-day {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-    
-    .week-day-header {
-      font-weight: bold;
-      padding: 12px;
-      background: var(--gray-light);
-      border-radius: var(--border-radius);
-      text-align: center;
-    }
-    
-    .week-day-events {
-      background: white;
-      padding: 15px;
-      border-radius: var(--border-radius);
-      border: 1px solid var(--gray-light);
-    }
-    
     /* Quick actions */
     .quick-actions {
       display: flex;
@@ -650,18 +582,30 @@
       border-bottom: none;
     }
     
+    /* Client expense allocation */
+    .client-allocation {
+      margin-top: 15px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+      padding: 15px;
+    }
+    
+    .client-allocation-header {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .client-allocation-details {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
       .container {
         padding: 15px;
-      }
-      
-      .calendar-grid, .calendar-week-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .calendar-day {
-        min-height: auto;
       }
       
       .stats-grid {
@@ -782,37 +726,22 @@
     <!-- Agenda Tab -->
     <div id="calendar" class="tab-content">
       <div class="calendar-header">
-        <h2 style="margin: 0;" id="calendar-month-year">Mês Ano</h2>
+        <h2 style="margin: 0;" id="calendar-week-title">Semana Atual</h2>
         <div class="calendar-nav">
-          <button onclick="previousPeriod()">&lt; Anterior</button>
-          <button onclick="goToToday()">Hoje</button>
-          <button onclick="nextPeriod()">Próximo &gt;</button>
+          <button onclick="previousWeek()">&lt; Semana Anterior</button>
+          <button onclick="goToToday()">Esta Semana</button>
+          <button onclick="nextWeek()">Próxima Semana &gt;</button>
         </div>
       </div>
       
-      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-        <div class="calendar-view-options">
-          <div class="calendar-view-option active" id="view-month" onclick="switchView('month')">Mês</div>
-          <div class="calendar-view-option" id="view-week" onclick="switchView('week')">Semana</div>
-        </div>
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
         <button onclick="showAddEventModal()">
           <span>+</span> Agendar Compromisso
         </button>
       </div>
       
-      <div id="month-view">
-        <div class="calendar-grid" id="calendar-header-days">
-          <!-- Dias da semana -->
-        </div>
-        <div class="calendar-grid" id="calendar-view">
-          <!-- Calendário mensal gerado por JS -->
-        </div>
-      </div>
-      
-      <div id="week-view" class="hidden">
-        <div class="calendar-week-grid" id="week-view-container">
-          <!-- Calendário semanal gerado por JS -->
-        </div>
+      <div class="calendar-week-grid" id="week-view-container">
+        <!-- Calendário semanal gerado por JS -->
       </div>
     </div>
 
@@ -891,16 +820,6 @@
         <button onclick="showModal('add-expense-type')" style="margin-top: 15px;">
           <span>+</span> Adicionar Tipo
         </button>
-      </div>
-
-      <div class="form-group">
-        <h3>Alocação Padrão de Despesas</h3>
-        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 5px;">
-          Defina métodos de alocação padrão que serão sugeridos ao adicionar despesas.
-        </p>
-        <div id="default-allocation-rules">
-          <!-- Regras padrão carregadas aqui -->
-        </div>
       </div>
 
       <div class="form-group">
@@ -1163,7 +1082,6 @@
 
     // Calendar state
     let currentDate = new Date();
-    let currentView = 'month'; // 'month' or 'week'
     let currentEditingExpenseTypeIndex = null;
 
     // Check first run
@@ -1178,7 +1096,7 @@
       loadExpenses();
       loadExpenseTypes();
       loadEvents();
-      generateCalendar();
+      generateWeekCalendar();
       generateReport();
       updateDashboard();
       
@@ -1209,7 +1127,7 @@
       
       // Refresh content when switching tabs
       if (tabId === 'dashboard') updateDashboard();
-      if (tabId === 'calendar') generateCalendar();
+      if (tabId === 'calendar') generateWeekCalendar();
       if (tabId === 'expenses') loadExpenses();
       if (tabId === 'clients') loadClients();
       if (tabId === 'report') generateReport();
@@ -1566,7 +1484,7 @@
         
         loadClients();
         loadExpenses();
-        generateCalendar();
+        generateWeekCalendar();
         updateDashboard();
       }
     }
@@ -1954,105 +1872,19 @@
       // Already loaded in initialization
     }
 
-    function switchView(view) {
-      currentView = view;
-      document.getElementById('view-month').classList.toggle('active', view === 'month');
-      document.getElementById('view-week').classList.toggle('active', view === 'week');
-      document.getElementById('month-view').classList.toggle('hidden', view !== 'month');
-      document.getElementById('week-view').classList.toggle('hidden', view !== 'week');
-      generateCalendar();
+    function previousWeek() {
+      currentDate.setDate(currentDate.getDate() - 7);
+      generateWeekCalendar();
     }
 
-    function previousPeriod() {
-      if (currentView === 'month') {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-      } else {
-        currentDate.setDate(currentDate.getDate() - 7);
-      }
-      generateCalendar();
-    }
-
-    function nextPeriod() {
-      if (currentView === 'month') {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-      } else {
-        currentDate.setDate(currentDate.getDate() + 7);
-      }
-      generateCalendar();
+    function nextWeek() {
+      currentDate.setDate(currentDate.getDate() + 7);
+      generateWeekCalendar();
     }
 
     function goToToday() {
       currentDate = new Date();
-      generateCalendar();
-    }
-
-    function generateCalendar() {
-      if (currentView === 'month') {
-        generateMonthCalendar();
-      } else {
-        generateWeekCalendar();
-      }
-    }
-
-    function generateMonthCalendar() {
-      const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-      const headerDays = document.getElementById('calendar-header-days');
-      headerDays.innerHTML = '';
-      
-      daysOfWeek.forEach(day => {
-        const dayHeader = document.createElement('div');
-        dayHeader.className = 'calendar-day-header';
-        dayHeader.textContent = day;
-        headerDays.appendChild(dayHeader);
-      });
-      
-      // Update month/year display
-      const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-      document.getElementById('calendar-month-year').textContent = 
-        `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-      
-      // Get first day of month and total days
-      const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-      const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-      const daysInLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
-      
-      const calendar = document.getElementById('calendar-view');
-      calendar.innerHTML = '';
-      
-      // Add days from previous month
-      for (let i = firstDay - 1; i >= 0; i--) {
-        const day = daysInLastMonth - i;
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, day);
-        const dateStr = date.toISOString().split('T')[0];
-        
-        const dayElement = createCalendarDay(day, dateStr, true);
-        calendar.appendChild(dayElement);
-      }
-      
-      // Add days from current month
-      const today = new Date();
-      for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-        const dateStr = date.toISOString().split('T')[0];
-        const isToday = date.getDate() === today.getDate() && 
-                        date.getMonth() === today.getMonth() && 
-                        date.getFullYear() === today.getFullYear();
-        
-        const dayElement = createCalendarDay(day, dateStr, false, isToday);
-        calendar.appendChild(dayElement);
-      }
-      
-      // Add days from next month to fill the grid
-      const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
-      const nextMonthDays = totalCells - (firstDay + daysInMonth);
-      
-      for (let day = 1; day <= nextMonthDays; day++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, day);
-        const dateStr = date.toISOString().split('T')[0];
-        
-        const dayElement = createCalendarDay(day, dateStr, true);
-        calendar.appendChild(dayElement);
-      }
+      generateWeekCalendar();
     }
 
     function generateWeekCalendar() {
@@ -2067,8 +1899,12 @@
       const daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
       const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
       
-      document.getElementById('calendar-month-year').textContent = 
-        `Semana de ${weekStart.getDate()} ${monthNames[weekStart.getMonth()]} ${weekStart.getFullYear()}`;
+      // Update week title
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      
+      document.getElementById('calendar-week-title').textContent = 
+        `Semana de ${weekStart.getDate()} ${monthNames[weekStart.getMonth()]} a ${weekEnd.getDate()} ${monthNames[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
       
       for (let i = 0; i < 7; i++) {
         const dayDate = new Date(weekStart);
@@ -2120,43 +1956,6 @@
         dayElement.appendChild(dayEventsContainer);
         weekContainer.appendChild(dayElement);
       }
-    }
-
-    function createCalendarDay(day, dateStr, isOtherMonth, isToday = false) {
-      const dayElement = document.createElement('div');
-      dayElement.className = `calendar-day ${isOtherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}`;
-      
-      const dayHeader = document.createElement('div');
-      dayHeader.style.fontWeight = 'bold';
-      dayHeader.style.marginBottom = '8px';
-      dayHeader.textContent = day;
-      dayElement.appendChild(dayHeader);
-      
-      // Add events for this day
-      const dayEvents = events.filter(event => event.date === dateStr)
-                             .sort((a, b) => a.time.localeCompare(b.time));
-      
-      if (dayEvents.length === 0 && !isOtherMonth) {
-        const emptyEvent = document.createElement('div');
-        emptyEvent.style.color = 'var(--gray)';
-        emptyEvent.style.fontSize = '0.8rem';
-        emptyEvent.textContent = 'Sem compromissos';
-        dayElement.appendChild(emptyEvent);
-      } else {
-        dayEvents.forEach(event => {
-          const eventElement = document.createElement('div');
-          eventElement.className = 'calendar-event';
-          eventElement.title = `${event.time} - ${event.client} (${event.duration}h)`;
-          eventElement.innerHTML = `
-            <div><strong>${event.time} - ${event.client}</strong></div>
-            <div>${event.duration}h ${event.location ? `📍 ${event.location}` : ''}</div>
-          `;
-          eventElement.onclick = () => editCalendarEvent(event);
-          dayElement.appendChild(eventElement);
-        });
-      }
-      
-      return dayElement;
     }
 
     function editCalendarEvent(event) {
@@ -2223,7 +2022,7 @@
       };
       
       localStorage.setItem('events', JSON.stringify(events));
-      generateCalendar();
+      generateWeekCalendar();
       hideModal();
       
       // Reset form and restore original save function
@@ -2282,7 +2081,7 @@
       }
       
       localStorage.setItem('events', JSON.stringify(events));
-      generateCalendar();
+      generateWeekCalendar();
       hideModal();
       
       // Reset form
@@ -2345,33 +2144,55 @@
           
           // Expenses per client
           let clientExpenses = 0;
+          let expenseBreakdown = [];
+          
           dayExpenses.forEach(expense => {
             if (expense.clients.includes(client)) {
               // Split expense according to allocation method
+              let amount = 0;
+              let allocationMethod = '';
+              
               if (expense.allocationMethod === 'single') {
                 if (expense.clients[0] === client) {
-                  clientExpenses += expense.amount;
+                  amount = expense.amount;
+                  allocationMethod = '100% (único cliente)';
                 }
               } else if (expense.allocationMethod === 'equal') {
-                clientExpenses += expense.amount / expense.clients.length;
+                amount = expense.amount / expense.clients.length;
+                allocationMethod = `Igual (${Math.round(100 / expense.clients.length)}%)`;
               } else if (expense.allocationMethod === 'time') {
                 // Allocate based on time spent with client vs total time
                 const totalDayTime = totalHours || 1; // Avoid division by zero
                 const clientPercentage = clientTime / totalDayTime;
-                clientExpenses += expense.amount * clientPercentage;
+                amount = expense.amount * clientPercentage;
+                allocationMethod = `Tempo (${Math.round(clientPercentage * 100)}%)`;
               } else if (expense.allocationMethod === 'distance') {
                 // Allocate based on distance traveled for client vs total distance
                 const totalDayDistance = totalDistance || 1; // Avoid division by zero
                 const clientPercentage = clientDistance / totalDayDistance;
-                clientExpenses += expense.amount * clientPercentage;
+                amount = expense.amount * clientPercentage;
+                allocationMethod = `Distância (${Math.round(clientPercentage * 100)}%)`;
               } else if (expense.allocationMethod === 'custom' && expense.customAllocations) {
                 // Allocate based on custom percentages
                 const percentage = expense.customAllocations[client] || 0;
-                clientExpenses += expense.amount * (percentage / 100);
+                amount = expense.amount * (percentage / 100);
+                allocationMethod = `Personalizado (${percentage}%)`;
               } else {
                 // Default to equal split
-                clientExpenses += expense.amount / expense.clients.length;
+                amount = expense.amount / expense.clients.length;
+                allocationMethod = `Igual (${Math.round(100 / expense.clients.length)}%)`;
               }
+              
+              clientExpenses += amount;
+              
+              // Add to expense breakdown
+              const type = expenseTypes.find(t => t.name === expense.type) || { icon: '💰' };
+              expenseBreakdown.push({
+                type: `${type.icon || ''} ${expense.type.charAt(0).toUpperCase() + expense.type.slice(1)}`,
+                amount: amount,
+                allocation: allocationMethod,
+                notes: expense.notes || ''
+              });
             }
           });
           
@@ -2481,40 +2302,93 @@
         expensesByTypeHTML += `</div>`;
       }
       
-      // Generate expenses list
-      let expensesHTML = `
-        <h3 style="margin-top: 30px;">Detalhe de Despesas</h3>
-      `;
-      
-      if (dayExpenses.length === 0) {
-        expensesHTML += `<p>Nenhuma despesa registada</p>`;
-      } else {
-        dayExpenses.forEach(expense => {
-          const type = expenseTypes.find(t => t.name === expense.type) || { icon: '💰' };
-          const icon = type.icon || '💰';
+      // Generate detailed expense allocation by client
+      let clientAllocationHTML = '';
+      if (allClients.length > 0 && dayExpenses.length > 0) {
+        clientAllocationHTML = `
+          <h3 style="margin-top: 30px;">Alocação de Despesas por Cliente</h3>
+        `;
+        
+        allClients.forEach(client => {
+          // Filter expenses that include this client
+          const clientExpenses = dayExpenses.filter(expense => expense.clients.includes(client));
           
-          const clientTags = expense.clients.map(client => 
-            `<span class="client-tag">${client}</span>`
-          ).join('');
-          
-          expensesHTML += `
-            <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--gray-light);">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <strong>${icon} ${expense.type.charAt(0).toUpperCase() + expense.type.slice(1)}</strong>
-                <span>€${expense.amount.toFixed(2)}</span>
+          if (clientExpenses.length > 0) {
+            let totalClientExpense = 0;
+            let expenseItemsHTML = '';
+            
+            clientExpenses.forEach(expense => {
+              // Calculate allocation for this client
+              let amount = 0;
+              let allocationMethod = '';
+              
+              if (expense.allocationMethod === 'single') {
+                if (expense.clients[0] === client) {
+                  amount = expense.amount;
+                  allocationMethod = '100% (único cliente)';
+                }
+              } else if (expense.allocationMethod === 'equal') {
+                amount = expense.amount / expense.clients.length;
+                allocationMethod = `Igual (${Math.round(100 / expense.clients.length)}%)`;
+              } else if (expense.allocationMethod === 'time') {
+                // Allocate based on time spent with client vs total time
+                const clientTime = dayEvents
+                  .filter(event => event.client === client)
+                  .reduce((sum, event) => sum + event.duration, 0);
+                const clientPercentage = clientTime / (totalHours || 1);
+                amount = expense.amount * clientPercentage;
+                allocationMethod = `Tempo (${Math.round(clientPercentage * 100)}%)`;
+              } else if (expense.allocationMethod === 'distance') {
+                // Allocate based on distance traveled for client vs total distance
+                const clientDistance = dayEvents
+                  .filter(event => event.client === client)
+                  .reduce((sum, event) => sum + (event.distance || 0), 0);
+                const clientPercentage = clientDistance / (totalDistance || 1);
+                amount = expense.amount * clientPercentage;
+                allocationMethod = `Distância (${Math.round(clientPercentage * 100)}%)`;
+              } else if (expense.allocationMethod === 'custom' && expense.customAllocations) {
+                // Allocate based on custom percentages
+                const percentage = expense.customAllocations[client] || 0;
+                amount = expense.amount * (percentage / 100);
+                allocationMethod = `Personalizado (${percentage}%)`;
+              } else {
+                // Default to equal split
+                amount = expense.amount / expense.clients.length;
+                allocationMethod = `Igual (${Math.round(100 / expense.clients.length)}%)`;
+              }
+              
+              totalClientExpense += amount;
+              
+              // Get expense type icon
+              const type = expenseTypes.find(t => t.name === expense.type) || { icon: '💰' };
+              
+              expenseItemsHTML += `
+                <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--gray-light);">
+                  <div style="display: flex; justify-content: space-between;">
+                    <div>${type.icon || ''} ${expense.type.charAt(0).toUpperCase() + expense.type.slice(1)}</div>
+                    <div>€${amount.toFixed(2)}</div>
+                  </div>
+                  <div style="font-size: 0.85rem; color: var(--gray);">${allocationMethod}</div>
+                  ${expense.notes ? `<div style="margin-top: 5px; font-size: 0.85rem;">${expense.notes}</div>` : ''}
+                </div>
+              `;
+            });
+            
+            clientAllocationHTML += `
+              <div class="client-allocation" style="margin-bottom: 20px;">
+                <div class="client-allocation-header">
+                  <div>${client}</div>
+                  <div>Total: €${totalClientExpense.toFixed(2)}</div>
+                </div>
+                ${expenseItemsHTML}
               </div>
-              <div style="font-size: 0.9rem; color: var(--gray); margin-bottom: 5px;">
-                Alocado por: ${getAllocationMethodName(expense.allocationMethod)}
-              </div>
-              <div style="margin-bottom: 5px;">${clientTags}</div>
-              ${expense.notes ? `<div style="margin-top: 5px; font-size: 0.9rem;">${expense.notes}</div>` : ''}
-            </div>
-          `;
+            `;
+          }
         });
       }
       
       // Combine all report sections
-      reportSummary.innerHTML = narrative + chartsHTML + breakdownHTML + appointmentsHTML + expensesByTypeHTML + expensesHTML;
+      reportSummary.innerHTML = narrative + chartsHTML + breakdownHTML + appointmentsHTML + expensesByTypeHTML + clientAllocationHTML;
       
       // Render charts if we have clients
       if (allClients.length > 0) {
@@ -2788,7 +2662,7 @@
             loadClients();
             loadExpenses();
             loadExpenseTypes();
-            generateCalendar();
+            generateWeekCalendar();
             generateReport();
             updateDashboard();
             
@@ -2822,7 +2696,7 @@
         loadClients();
         loadExpenses();
         loadExpenseTypes();
-        generateCalendar();
+        generateWeekCalendar();
         generateReport();
         updateDashboard();
         
