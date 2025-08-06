@@ -53,6 +53,7 @@
       color: var(--dark);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      overflow-x: hidden;
     }
     
     .container {
@@ -70,6 +71,17 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+    }
+    
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      flex-grow: 1;
     }
     
     h1 {
@@ -83,6 +95,18 @@
       opacity: 0.9;
       margin-top: 5px;
       font-weight: 400;
+    }
+    
+    /* Mobile Menu Button */
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      display: none;
+      margin-left: 10px;
     }
     
     /* Tabs */
@@ -121,6 +145,76 @@
       background: var(--primary);
       color: white;
       font-weight: 600;
+    }
+    
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      background: white;
+      z-index: 1000;
+      transition: var(--transition);
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+    
+    .mobile-menu.active {
+      left: 0;
+    }
+    
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: var(--primary);
+      color: white;
+    }
+    
+    .mobile-menu-content {
+      padding: 15px;
+    }
+    
+    .mobile-tab {
+      display: block;
+      padding: 12px 15px;
+      margin-bottom: 5px;
+      border-radius: var(--border-radius);
+      color: var(--dark);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .mobile-tab.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .mobile-tab:hover {
+      background: var(--primary-light);
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+    
+    .overlay.active {
+      opacity: 1;
+      pointer-events: all;
     }
     
     /* Tab content */
@@ -629,7 +723,7 @@
     
     /* Print styles */
     @media print {
-      header, .tabs, button {
+      header, .tabs, button, .mobile-menu {
         display: none !important;
       }
       
@@ -707,11 +801,34 @@
       }
     }
     
-    /* Very small screens */
-    @media (max-width: 400px) {
-      .quick-actions button, .calendar-nav button {
-        padding: 10px 12px;
-        font-size: 0.9rem;
+    /* Mobile styles */
+    @media (max-width: 767px) {
+      .menu-toggle {
+        display: block;
+      }
+      
+      .tabs {
+        display: none;
+      }
+      
+      header {
+        padding: 10px;
+      }
+      
+      h1 {
+        font-size: 1.3rem;
+      }
+      
+      .subtitle {
+        font-size: 0.8rem;
+      }
+      
+      .tab-content {
+        padding: 15px;
+      }
+      
+      .week-day {
+        grid-template-columns: 100px 1fr;
       }
       
       .expense-item, .client-item, .expense-type-item {
@@ -724,16 +841,59 @@
         width: 100%;
         justify-content: flex-end;
       }
+      
+      .modal-content {
+        padding: 15px;
+      }
+    }
+    
+    /* Very small screens */
+    @media (max-width: 400px) {
+      .quick-actions button, .calendar-nav button {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .week-day {
+        grid-template-columns: 1fr;
+      }
+      
+      .week-day-header {
+        padding: 8px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="container">
+    <div class="header-content">
       <h1>Gestão de Tempo e Despesas Profissionais</h1>
       <div class="subtitle">Agendar • Monitorizar • Justificar</div>
     </div>
+    <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
   </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <div>Menu</div>
+      <button class="close-modal" onclick="toggleMobileMenu()">&times;</button>
+    </div>
+    <div class="mobile-menu-content">
+      <a href="#" class="mobile-tab active" onclick="openTab('dashboard'); toggleMobileMenu()">Painel</a>
+      <a href="#" class="mobile-tab" onclick="openTab('calendar'); toggleMobileMenu()">Agenda</a>
+      <a href="#" class="mobile-tab" onclick="openTab('expenses'); toggleMobileMenu()">Despesas</a>
+      <a href="#" class="mobile-tab" onclick="openTab('report'); toggleMobileMenu()">Relatórios</a>
+      <a href="#" class="mobile-tab" onclick="openTab('clients'); toggleMobileMenu()">Clientes</a>
+      <a href="#" class="mobile-tab" onclick="openTab('settings'); toggleMobileMenu()">Definições</a>
+    </div>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMobileMenu()"></div>
 
   <div class="container">
     <div class="tabs">
@@ -1182,6 +1342,15 @@
       }
     });
 
+    // Mobile menu functions
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const overlay = document.getElementById('overlay');
+      menu.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+    }
+
     // Tab navigation
     function openTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => {
@@ -1190,8 +1359,13 @@
       document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
       });
+      document.querySelectorAll('.mobile-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
       document.getElementById(tabId).classList.add('active');
-      document.querySelector(`.tab[onclick="openTab('${tabId}')"]`).classList.add('active');
+      document.querySelector(`.tab[onclick="openTab('${tabId}')"]`)?.classList.add('active');
+      document.querySelector(`.mobile-tab[onclick*="openTab('${tabId}')"]`)?.classList.add('active');
       
       // Refresh content when switching tabs
       if (tabId === 'dashboard') updateDashboard();
