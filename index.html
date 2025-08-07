@@ -1,26 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Aplicação para gestão de tempo, despesas e relatórios para profissionais móveis. Agende, monitorize e justifique o seu trabalho com facilidade.">
-  <meta name="keywords" content="gestão tempo, despesas profissionais, relatórios trabalho, agenda profissional, aplicação mobile">
-  <meta name="author" content="Agna Gabriel">
-  <meta name="theme-color" content="#4361ee">
-  <meta property="og:title" content="Gestão de Tempo e Despesas Profissionais - Gestão Profissional">
-  <meta property="og:description" content="Aplicação completa para gestão de tempo, despesas e relatórios para profissionais móveis.">
-  <meta property="og:type" content="website">
-  
-  <title>Gestão de Tempo e Despesas Profissionais</title>
-  
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/icon-192x192.png">
-  
+  <title>Smart Work Log PRO</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
     :root {
       --primary: #4361ee;
@@ -43,7 +30,6 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      -webkit-tap-highlight-color: transparent;
     }
     
     body {
@@ -52,19 +38,18 @@
       background-color: #f5f7ff;
       color: var(--dark);
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
     
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 15px;
+      padding: 20px;
     }
     
     header {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      padding: 15px 0;
+      padding: 20px 0;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       position: sticky;
@@ -74,12 +59,12 @@
     
     h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 700;
     }
     
     .subtitle {
-      font-size: 0.9rem;
+      font-size: 1rem;
       opacity: 0.9;
       margin-top: 5px;
       font-weight: 400;
@@ -89,13 +74,12 @@
     .tabs {
       display: flex;
       overflow-x: auto;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       background: white;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
       padding: 5px;
       scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
     }
     
     .tabs::-webkit-scrollbar {
@@ -103,14 +87,13 @@
     }
     
     .tab {
-      padding: 10px 15px;
+      padding: 10px 20px;
       cursor: pointer;
       white-space: nowrap;
       border-radius: 5px;
       margin-right: 5px;
       transition: var(--transition);
       font-weight: 500;
-      font-size: 0.9rem;
     }
     
     .tab:hover {
@@ -127,10 +110,10 @@
     .tab-content {
       display: none;
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       animation: fadeIn 0.3s ease;
     }
     
@@ -145,7 +128,7 @@
     
     /* Forms */
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     
     label {
@@ -165,7 +148,6 @@
       font-size: 1rem;
       transition: var(--transition);
       background-color: white;
-      -webkit-appearance: none;
     }
     
     input:focus, select:focus, textarea:focus {
@@ -188,10 +170,9 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      touch-action: manipulation;
     }
     
-    button:hover, button:focus {
+    button:hover {
       background: var(--primary-dark);
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -207,7 +188,7 @@
       border: 1px solid var(--primary);
     }
     
-    button.secondary:hover, button.secondary:focus {
+    button.secondary:hover {
       background: var(--primary-light);
     }
     
@@ -215,7 +196,7 @@
       background: var(--danger);
     }
     
-    button.danger:hover, button.danger:focus {
+    button.danger:hover {
       background: #d90429;
     }
     
@@ -223,19 +204,19 @@
       background: var(--success);
     }
     
-    button.success:hover, button.success:focus {
+    button.success:hover {
       background: #27ae60;
     }
     
     /* Lists */
     .expense-list, .client-list, .expense-types-list {
-      margin-top: 15px;
+      margin-top: 20px;
     }
     
     .expense-item, .client-item, .expense-type-item {
       background: white;
-      padding: 15px;
-      margin-bottom: 10px;
+      padding: 18px;
+      margin-bottom: 12px;
       border-radius: var(--border-radius);
       display: flex;
       justify-content: space-between;
@@ -256,43 +237,42 @@
     
     .expense-actions {
       display: flex;
-      gap: 8px;
+      gap: 10px;
     }
     
     /* Report summary */
     .report-summary {
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: var(--border-radius);
-      margin-top: 15px;
+      margin-top: 20px;
       border: 1px solid var(--gray-light);
     }
     
     /* Calendar */
     .calendar-header {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 15px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
     
     .calendar-nav {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 10px;
     }
     
     .week-day {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
+      grid-template-columns: 120px 1fr;
+      gap: 15px;
       margin-bottom: 15px;
     }
     
     .week-day-header {
       font-weight: bold;
-      padding: 10px;
+      padding: 12px;
       background: var(--gray-light);
       border-radius: var(--border-radius);
       text-align: center;
@@ -300,7 +280,7 @@
     
     .week-day-events {
       background: white;
-      padding: 12px;
+      padding: 15px;
       border-radius: var(--border-radius);
       border: 1px solid var(--gray-light);
     }
@@ -329,12 +309,12 @@
     /* Client tags */
     .client-tag {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 3px 10px;
       background: var(--primary-light);
       border-radius: 20px;
-      font-size: 0.75rem;
-      margin-right: 5px;
-      margin-top: 5px;
+      font-size: 0.8rem;
+      margin-right: 6px;
+      margin-top: 6px;
       color: var(--primary-dark);
     }
     
@@ -352,15 +332,13 @@
       z-index: 1000;
       backdrop-filter: blur(3px);
       animation: fadeIn 0.3s ease;
-      padding: 15px;
-      overflow-y: auto;
     }
     
     .modal-content {
       background: white;
-      padding: 20px;
+      padding: 30px;
       border-radius: 12px;
-      width: 100%;
+      width: 90%;
       max-width: 600px;
       max-height: 90vh;
       overflow-y: auto;
@@ -377,19 +355,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     
     .modal-title {
       margin: 0;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       color: var(--dark);
     }
     
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
       color: var(--gray);
       transition: var(--transition);
@@ -403,23 +381,23 @@
     .modal-footer {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-      padding-top: 15px;
+      gap: 12px;
+      margin-top: 30px;
+      padding-top: 20px;
       border-top: 1px solid var(--gray-light);
     }
     
     /* Stats */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
     }
     
     .stat-card {
       background: white;
-      padding: 15px;
+      padding: 20px;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
       border: 1px solid var(--gray-light);
@@ -432,14 +410,14 @@
     }
     
     .stat-value {
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--primary);
-      margin: 8px 0;
+      margin: 10px 0;
     }
     
     .stat-label {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       color: var(--gray);
     }
     
@@ -447,25 +425,25 @@
     .allocation-rule {
       display: flex;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
     
     .allocation-rule select {
       flex: 1;
-      margin: 0 10px;
+      margin: 0 12px;
     }
     
     /* Empty state */
     .empty-state {
       text-align: center;
-      padding: 30px 15px;
+      padding: 50px 20px;
       color: var(--gray);
     }
     
     .empty-state img {
-      max-width: 120px;
+      max-width: 150px;
       opacity: 0.7;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     
     /* Tooltip */
@@ -477,12 +455,12 @@
     
     .tooltip-text {
       visibility: hidden;
-      width: 200px;
+      width: 220px;
       background: var(--dark);
       color: white;
       text-align: center;
       border-radius: 6px;
-      padding: 8px;
+      padding: 10px;
       position: absolute;
       z-index: 1;
       bottom: 125%;
@@ -490,7 +468,7 @@
       transform: translateX(-50%);
       opacity: 0;
       transition: opacity 0.3s;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       font-weight: normal;
     }
     
@@ -501,11 +479,11 @@
     
     /* Charts */
     .chart-container {
-      margin: 20px 0;
+      margin: 30px 0;
       position: relative;
-      height: 300px;
+      height: 350px;
       background: white;
-      padding: 15px;
+      padding: 20px;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
       border: 1px solid var(--gray-light);
@@ -514,11 +492,11 @@
     /* Report narrative */
     .report-narrative {
       background: var(--gray-light);
-      padding: 15px;
+      padding: 20px;
       border-radius: var(--border-radius);
-      margin: 20px 0;
-      font-size: 0.95rem;
-      line-height: 1.6;
+      margin: 25px 0;
+      font-size: 1rem;
+      line-height: 1.7;
     }
     
     .report-narrative strong {
@@ -528,16 +506,16 @@
     /* Allocation section */
     .allocation-section {
       background: var(--gray-light);
-      padding: 15px;
+      padding: 20px;
       border-radius: var(--border-radius);
-      margin-top: 15px;
+      margin-top: 20px;
     }
     
     /* Distance input */
     .distance-input {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
     
     .distance-input input {
@@ -548,7 +526,7 @@
     .client-checkbox {
       display: flex;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       padding: 8px;
       border-radius: 4px;
       transition: var(--transition);
@@ -560,7 +538,7 @@
     
     .client-checkbox input {
       width: auto;
-      margin-right: 10px;
+      margin-right: 12px;
     }
     
     .client-checkbox label {
@@ -572,14 +550,14 @@
     /* Quick actions */
     .quick-actions {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 25px;
       flex-wrap: wrap;
     }
     
     /* Expense breakdown */
     .expense-breakdown {
-      margin-top: 15px;
+      margin-top: 20px;
       border: 1px solid var(--gray-light);
       border-radius: var(--border-radius);
       overflow: hidden;
@@ -587,19 +565,17 @@
     
     .expense-breakdown-header {
       background: var(--gray-light);
-      padding: 10px 12px;
+      padding: 12px 15px;
       font-weight: 600;
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
     }
     
     .expense-breakdown-item {
-      padding: 10px 12px;
+      padding: 12px 15px;
       border-bottom: 1px solid var(--gray-light);
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
     }
     
     .expense-breakdown-item:last-child {
@@ -608,23 +584,60 @@
     
     /* Client expense allocation */
     .client-allocation {
-      margin-top: 12px;
+      margin-top: 15px;
       border: 1px solid var(--gray-light);
       border-radius: var(--border-radius);
-      padding: 12px;
+      padding: 15px;
     }
     
     .client-allocation-header {
       font-weight: bold;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
-      font-size: 0.95rem;
     }
     
     .client-allocation-details {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--gray);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .week-day {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        padding: 20px;
+      }
+      
+      .quick-actions {
+        flex-direction: column;
+      }
+      
+      .quick-actions button {
+        width: 100%;
+      }
+      
+      .expense-item, .client-item, .expense-type-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .expense-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
     }
     
     /* Print styles */
@@ -650,87 +663,12 @@
         padding: 0;
       }
     }
-    
-    /* Larger screens */
-    @media (min-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-      
-      header {
-        padding: 20px 0;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-      
-      .tab {
-        padding: 10px 20px;
-        font-size: 1rem;
-      }
-      
-      .tab-content {
-        padding: 25px;
-      }
-      
-      .stats-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 20px;
-      }
-      
-      .stat-value {
-        font-size: 2rem;
-      }
-      
-      .calendar-header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .week-day {
-        grid-template-columns: 120px 1fr;
-        gap: 15px;
-      }
-      
-      .modal-content {
-        padding: 25px;
-      }
-      
-      .modal-title {
-        font-size: 1.5rem;
-      }
-    }
-    
-    /* Very small screens */
-    @media (max-width: 400px) {
-      .quick-actions button, .calendar-nav button {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-      }
-      
-      .expense-item, .client-item, .expense-type-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-      
-      .expense-actions {
-        width: 100%;
-        justify-content: flex-end;
-      }
-    }
   </style>
 </head>
 <body>
   <header>
     <div class="container">
-      <h1>Gestão de Tempo e Despesas Profissionais</h1>
+      <h1>Smart Work Log PRO</h1>
       <div class="subtitle">Agendar • Monitorizar • Justificar</div>
     </div>
   </header>
@@ -769,18 +707,18 @@
       <h3>Ações Rápidas</h3>
       <div class="quick-actions">
         <button onclick="showAddEventModal()">
-          <span>+</span> Agendar
+          <span>+</span> Agendar Compromisso
         </button>
         <button onclick="showModal('add-expense')" class="secondary">
-          <span>+</span> Despesa
+          <span>+</span> Adicionar Despesa
         </button>
         <button onclick="showModal('add-client')" class="secondary">
-          <span>+</span> Cliente
+          <span>+</span> Adicionar Cliente
         </button>
       </div>
 
       <h3>Próximos Compromissos</h3>
-      <div id="upcoming-events" style="margin-top: 15px;">
+      <div id="upcoming-events" style="margin-top: 20px;">
         <!-- Preenchido por JS -->
       </div>
     </div>
@@ -790,15 +728,15 @@
       <div class="calendar-header">
         <h2 style="margin: 0;" id="calendar-week-title">Semana Atual</h2>
         <div class="calendar-nav">
-          <button onclick="previousWeek()">&lt; Anterior</button>
-          <button onclick="goToToday()">Hoje</button>
-          <button onclick="nextWeek()">Próxima &gt;</button>
+          <button onclick="previousWeek()">&lt; Semana Anterior</button>
+          <button onclick="goToToday()">Esta Semana</button>
+          <button onclick="nextWeek()">Próxima Semana &gt;</button>
         </div>
       </div>
       
-      <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
         <button onclick="showAddEventModal()">
-          <span>+</span> Agendar
+          <span>+</span> Agendar Compromisso
         </button>
       </div>
       
@@ -809,11 +747,11 @@
 
     <!-- Despesas Tab -->
     <div id="expenses" class="tab-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="margin: 0;">Despesas</h2>
         <div>
           <button onclick="showModal('add-expense')">
-            <span>+</span> Adicionar
+            <span>+</span> Adicionar Despesa
           </button>
         </div>
       </div>
@@ -824,11 +762,11 @@
 
     <!-- Relatórios Tab -->
     <div id="report" class="tab-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="margin: 0;">Relatórios</h2>
         <div>
-          <button onclick="exportToPDF()">Exportar PDF</button>
-          <button onclick="window.print()" class="secondary" style="margin-left: 8px;">Imprimir</button>
+          <button onclick="exportToPDF()">Exportar para PDF</button>
+          <button onclick="window.print()" class="secondary" style="margin-left: 10px;">Imprimir</button>
         </div>
       </div>
       <div class="form-group">
@@ -842,11 +780,11 @@
 
     <!-- Clientes Tab -->
     <div id="clients" class="tab-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2 style="margin: 0;">Clientes</h2>
         <div>
           <button onclick="showModal('add-client')">
-            <span>+</span> Adicionar
+            <span>+</span> Adicionar Cliente
           </button>
         </div>
       </div>
@@ -861,15 +799,15 @@
       
       <div class="form-group">
         <h3>Gestão de Dados</h3>
-        <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
-          <button onclick="exportData()" class="secondary">Exportar Dados</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <button onclick="exportData()" class="secondary">Exportar Todos os Dados</button>
           <button onclick="document.getElementById('import-data').click()" class="secondary">
             Importar Dados
           </button>
           <input type="file" id="import-data" accept=".json" style="display: none;" onchange="importData(this)">
-          <button onclick="resetData()" class="danger">Repor Dados</button>
+          <button onclick="resetData()" class="danger">Repor Todos os Dados</button>
         </div>
-        <p style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 5px;">
           Exporte os seus dados como backup ou para transferir entre dispositivos.
         </p>
       </div>
@@ -879,7 +817,7 @@
         <div id="expense-types-list" class="expense-types-list">
           <!-- Tipos de despesa carregados aqui -->
         </div>
-        <button onclick="showModal('add-expense-type')" style="margin-top: 12px;">
+        <button onclick="showModal('add-expense-type')" style="margin-top: 15px;">
           <span>+</span> Adicionar Tipo
         </button>
       </div>
@@ -887,7 +825,7 @@
       <div class="form-group">
         <h3>Ajuda & Suporte</h3>
         <button onclick="showModal('help')" class="secondary">Ver Tutorial</button>
-        <p style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
+        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 5px;">
           Precisa de ajuda? Consulte o tutorial ou contacte o suporte.
         </p>
       </div>
@@ -933,7 +871,7 @@
       </div>
       <div class="modal-footer">
         <button onclick="hideModal()">Cancelar</button>
-        <button onclick="saveEvent()">Guardar</button>
+        <button onclick="saveEvent()">Guardar Compromisso</button>
       </div>
     </div>
   </div>
@@ -960,7 +898,7 @@
       </div>
       <div class="form-group">
         <label for="expense-clients">Alocar a Clientes</label>
-        <div id="expense-clients" style="max-height: 200px; overflow-y: auto; padding: 12px; border: 1px solid var(--gray-light); border-radius: var(--border-radius);">
+        <div id="expense-clients" style="max-height: 200px; overflow-y: auto; padding: 15px; border: 1px solid var(--gray-light); border-radius: var(--border-radius);">
           <!-- Checkboxes de clientes carregados aqui -->
         </div>
       </div>
@@ -969,23 +907,23 @@
         <div class="form-group">
           <select id="expense-allocation-method" onchange="toggleAllocationFields()">
             <option value="single">Apenas um cliente</option>
-            <option value="equal">Divisão igual</option>
-            <option value="time">Por tempo gasto</option>
-            <option value="distance">Por distância</option>
-            <option value="custom">Personalizado</option>
+            <option value="equal">Divisão igual entre clientes</option>
+            <option value="time">Por tempo gasto com cada cliente</option>
+            <option value="distance">Por distância percorrida para cada cliente</option>
+            <option value="custom">Percentagens personalizadas</option>
           </select>
         </div>
         <div id="allocation-single-fields">
-          <p style="font-size: 0.85rem; color: var(--gray);">A despesa será alocada apenas ao cliente selecionado</p>
+          <p style="font-size: 0.9rem; color: var(--gray);">A despesa será alocada apenas ao cliente selecionado</p>
         </div>
         <div id="allocation-time-fields" class="hidden">
-          <p style="font-size: 0.85rem; color: var(--gray);">Será alocado com base no tempo gasto com cada cliente neste dia</p>
+          <p style="font-size: 0.9rem; color: var(--gray);">Será alocado com base no tempo gasto com cada cliente neste dia</p>
         </div>
         <div id="allocation-distance-fields" class="hidden">
-          <p style="font-size: 0.85rem; color: var(--gray);">Será alocado com base na distância percorrida para cada cliente neste dia</p>
+          <p style="font-size: 0.9rem; color: var(--gray);">Será alocado com base na distância percorrida para cada cliente neste dia</p>
         </div>
         <div id="allocation-custom-fields" class="hidden">
-          <p style="font-size: 0.85rem; color: var(--gray);">Defina percentagens de alocação personalizadas:</p>
+          <p style="font-size: 0.9rem; color: var(--gray);">Defina percentagens de alocação personalizadas:</p>
           <div id="custom-allocation-inputs">
             <!-- Preenchido com inputs de clientes -->
           </div>
@@ -997,7 +935,7 @@
       </div>
       <div class="modal-footer">
         <button onclick="hideModal()">Cancelar</button>
-        <button onclick="saveExpense()">Guardar</button>
+        <button onclick="saveExpense()">Guardar Despesa</button>
       </div>
     </div>
   </div>
@@ -1026,7 +964,7 @@
       </div>
       <div class="modal-footer">
         <button onclick="hideModal()">Cancelar</button>
-        <button onclick="saveClient()">Guardar</button>
+        <button onclick="saveClient()">Guardar Cliente</button>
       </div>
     </div>
   </div>
@@ -1045,10 +983,10 @@
         <label for="expense-type-default-allocation">Método de Alocação Padrão</label>
         <select id="expense-type-default-allocation">
           <option value="single">Apenas um cliente</option>
-          <option value="equal">Divisão igual</option>
-          <option value="time">Por tempo gasto</option>
-          <option value="distance">Por distância</option>
-          <option value="custom">Personalizado</option>
+          <option value="equal">Divisão igual entre clientes</option>
+          <option value="time">Por tempo gasto com cada cliente</option>
+          <option value="distance">Por distância percorrida para cada cliente</option>
+          <option value="custom">Percentagens personalizadas</option>
         </select>
       </div>
       <div class="form-group">
@@ -1057,7 +995,7 @@
       </div>
       <div class="modal-footer">
         <button onclick="hideModal()">Cancelar</button>
-        <button onclick="saveExpenseType()">Guardar</button>
+        <button onclick="saveExpenseType()">Guardar Tipo</button>
       </div>
     </div>
   </div>
@@ -1076,10 +1014,10 @@
         <label for="edit-expense-type-default-allocation">Método de Alocação Padrão</label>
         <select id="edit-expense-type-default-allocation">
           <option value="single">Apenas um cliente</option>
-          <option value="equal">Divisão igual</option>
-          <option value="time">Por tempo gasto</option>
-          <option value="distance">Por distância</option>
-          <option value="custom">Personalizado</option>
+          <option value="equal">Divisão igual entre clientes</option>
+          <option value="time">Por tempo gasto com cada cliente</option>
+          <option value="distance">Por distância percorrida para cada cliente</option>
+          <option value="custom">Percentagens personalizadas</option>
         </select>
       </div>
       <div class="form-group">
@@ -1088,7 +1026,7 @@
       </div>
       <div class="modal-footer">
         <button onclick="hideModal()">Cancelar</button>
-        <button onclick="updateExpenseType()">Atualizar</button>
+        <button onclick="updateExpenseType()">Atualizar Tipo</button>
       </div>
     </div>
   </div>
@@ -1112,6 +1050,11 @@
         <p>- Registar <strong>distância percorrida</strong> para cada compromisso</p>
         <p>- Exportar relatórios como PDF para partilhar com a sua empresa ou clientes</p>
         <p>- Faça backup regular dos seus dados usando a função Exportar</p>
+        
+        <h4>Dicas</h4>
+        <p>- Use o método de alocação "por tempo" para despesas como refeições durante o trabalho</p>
+        <p>- Use "por distância" para despesas de combustível e portagens</p>
+        <p>- Defina tipos de despesa com ícones para facilitar a identificação</p>
       </div>
       <div class="modal-footer">
         <button onclick="hideModal()">Fechar</button>
@@ -1169,17 +1112,6 @@
       now.setMinutes(minutes);
       const timeString = now.toTimeString().substring(0, 5);
       document.getElementById('event-time').value = timeString;
-      
-      // Register service worker for PWA
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('ServiceWorker registration successful');
-          }).catch(err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
     });
 
     // Tab navigation
@@ -2308,7 +2240,7 @@
       
       // Generate appointments list with improved layout
       let appointmentsHTML = `
-        <h3 style="margin-top: 25px;">Compromissos</h3>
+        <h3 style="margin-top: 30px;">Compromissos</h3>
       `;
       
       if (dayEvents.length === 0) {
@@ -2316,7 +2248,7 @@
       } else {
         dayEvents.forEach(event => {
           appointmentsHTML += `
-            <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-light);">
+            <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--gray-light);">
               <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                 <strong>${event.client}</strong>
                 <div>
@@ -2349,7 +2281,7 @@
         });
         
         expensesByTypeHTML = `
-          <h3 style="margin-top: 25px;">Despesas por Tipo</h3>
+          <h3 style="margin-top: 30px;">Despesas por Tipo</h3>
           <div class="expense-breakdown">
             <div class="expense-breakdown-header">
               <div>Tipo</div>
@@ -2374,7 +2306,7 @@
       let clientAllocationHTML = '';
       if (allClients.length > 0 && dayExpenses.length > 0) {
         clientAllocationHTML = `
-          <h3 style="margin-top: 25px;">Alocação de Despesas por Cliente</h3>
+          <h3 style="margin-top: 30px;">Alocação de Despesas por Cliente</h3>
         `;
         
         allClients.forEach(client => {
@@ -2431,7 +2363,7 @@
               const type = expenseTypes.find(t => t.name === expense.type) || { icon: '💰' };
               
               expenseItemsHTML += `
-                <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--gray-light);">
+                <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--gray-light);">
                   <div style="display: flex; justify-content: space-between;">
                     <div>${type.icon || ''} ${expense.type.charAt(0).toUpperCase() + expense.type.slice(1)}</div>
                     <div>€${amount.toFixed(2)}</div>
@@ -2443,7 +2375,7 @@
             });
             
             clientAllocationHTML += `
-              <div class="client-allocation" style="margin-bottom: 15px;">
+              <div class="client-allocation" style="margin-bottom: 20px;">
                 <div class="client-allocation-header">
                   <div>${client}</div>
                   <div>Total: €${totalClientExpense.toFixed(2)}</div>
@@ -2688,7 +2620,7 @@
       
       const a = document.createElement('a');
       a.href = url;
-      a.download = `gestão-profissional-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `smart-work-log-backup-${new Date().toISOString().split('T')[0]}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
